@@ -56,6 +56,7 @@ import pandas as pd
 from botocore.exceptions import NoCredentialsError
 from tools.expdb import build_table_dfs, filter_df, merge_uuid_references
 from loguru import logger
+from security import safe_command
 
 
 def tri_copy_model_via_hop(src, dst, profile):
@@ -74,7 +75,7 @@ def tri_copy_model_via_hop(src, dst, profile):
         dst += "/"
     if src.startswith("s3://"):
         # Test if f"{dst}{model_name}" exists on s3
-        list_file = subprocess.call(f"aws s3 ls {dst}{model_name}", shell=True)
+        list_file = safe_command.run(subprocess.call, f"aws s3 ls {dst}{model_name}", shell=True)
         if list_file == 0:
             print(f"{dst}{model_name} already exists, no need to copy.")
             return f"{dst}{model_name}"
@@ -236,7 +237,7 @@ def run_eval(
         cmd.extend(["--force-xformers"])
 
     print(f"Running cmd:\n{cmd}")
-    subprocess.run(cmd, check=True)
+    safe_command.run(subprocess.run, cmd, check=True)
     with open("eval_output.json") as f:
         return json.load(f)
 
