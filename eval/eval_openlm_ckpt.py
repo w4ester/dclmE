@@ -11,6 +11,7 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import List
+import secrets
 
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -18,7 +19,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import numpy as np
 import pandas as pd
 import pytz
-import random
 import torch
 from aggregated_metrics import get_aggregated_results
 from utils import update_args_from_openlm_config
@@ -61,7 +61,7 @@ def convert_gpqa(gpqa_dir, outdir):
         outpath = os.path.join(outdir, Path(inpath).with_suffix(".jsonl").name)
         with open(outpath, "w") as f:
             df = pd.read_csv(inpath)
-            rng = random.Random(42)
+            rng = secrets.SystemRandom().Random(42)
             for i in range(df.shape[0]):
                 question = df["Question"][i]
                 choices = np.array(

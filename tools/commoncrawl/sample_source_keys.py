@@ -7,7 +7,6 @@ import gzip
 import io
 import json
 import pathlib
-import random
 import re
 import subprocess
 import time
@@ -17,6 +16,7 @@ import boto3
 import fsspec
 from gen_common_crawl_paths import APPROX_TOKENS_PER_WARC
 from tqdm import tqdm
+import secrets
 
 
 def read_keys_from_file(file_path, regex_pattern):
@@ -53,8 +53,8 @@ def list_matching_s3_keys(bucket, prefix="", regex_pattern=""):
 
 def sample_keys(keys, subset_size, seed):
     """Randomly sample a subset of keys."""
-    random.seed(seed)
-    return random.sample(keys, min(subset_size, len(keys)))
+    secrets.SystemRandom().seed(seed)
+    return secrets.SystemRandom().sample(keys, min(subset_size, len(keys)))
 
 
 def get_git_info():
