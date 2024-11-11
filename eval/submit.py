@@ -33,7 +33,7 @@ def submit_to_slack(filename):
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     data = json.dumps({"text": message})
-    resp = requests.put(url, headers=headers, data=data)
+    resp = requests.put(url, headers=headers, data=data, timeout=60)
 
     return resp
 
