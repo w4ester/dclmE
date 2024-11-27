@@ -16,7 +16,7 @@ import pandas as pd
 import ray
 from ray._private.internal_api import memory_summary
 from ray.data.context import DataContext
-import random
+import secrets
 
 
 def convert_warc_to_wet(warc_path):
@@ -87,7 +87,7 @@ def process_file(path, documents_per_jsonl, is_wet, output_dir, counter):
         except:
             num_tries += 1
             backoff = delay * 2**num_tries
-            jitter = backoff * random.uniform(0.5, 1.5)
+            jitter = backoff * secrets.SystemRandom().uniform(0.5, 1.5)
             time.sleep(jitter)
 
     if num_tries >= MAX_NUM_TRIES:

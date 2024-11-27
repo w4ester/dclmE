@@ -10,8 +10,8 @@ from baselines.mappers.core_utils import split_paragraphs, split_words
 from core.constants import CONTENT, URL
 from core.factory_utils import factory_function
 from bs4 import BeautifulSoup
-import random
 import copy
+import secrets
 
 
 def starcoder_v2_repo_splitter(page: Dict, max_files=1000, delete_content=True):
@@ -63,7 +63,7 @@ def starcoder_v2_format_modifier(page: Dict, add_metadata_prob: float=0.5, add_s
 
     assert 0 <= add_metadata_prob <= 1
 
-    if random.random() < add_metadata_prob:
+    if secrets.SystemRandom().random() < add_metadata_prob:
         file_texts = [f"<file_sep>{f['filename']}\n{f['text']}" for f in page['files']]
         text = f"<repo_name>{page['repo_name']}" + "".join(file_texts)
     else:

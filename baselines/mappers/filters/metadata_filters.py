@@ -3,10 +3,10 @@ import re
 from urllib.parse import urlparse
 from retrie.retrie import Blacklist
 import pickle
-import random
 
 from core.factory_utils import factory_function
 from baselines.core.constants import *
+import secrets
 
 
 def random_sampling_filter(page, keep_probability=0.1):
@@ -20,7 +20,7 @@ def random_sampling_filter(page, keep_probability=0.1):
     A list containing the page if the language is in the keep_languages list and exceeds the threshold, otherwise an empty list.
     """
     assert 0 <= keep_probability <= 1
-    return [page] if random.random() < keep_probability else []
+    return [page] if secrets.SystemRandom().random() < keep_probability else []
     
 
 def language_filter(page: Dict, keep_languages: List[str], key='language_id_whole_page_langdetect', threshold=0.0) -> \
