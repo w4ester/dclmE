@@ -2,11 +2,11 @@ from typing import List, Dict, Union
 import re
 from urllib.parse import urlparse
 from retrie.retrie import Blacklist
-import pickle
 import random
 
 from core.factory_utils import factory_function
 from baselines.core.constants import *
+import fickling
 
 
 def random_sampling_filter(page, keep_probability=0.1):
@@ -110,7 +110,7 @@ def url_substring_filter(banlist: Union[str, List] = None, banlist_from_fname: s
     if banlist_from_fname is not None and any(banlist_from_fname.endswith(e) for e in ['.pkl', '.pickle']):
         assert not exact_domain_match, "pickled banlist cannot be used with exact_domain_match"
         with open(banlist_from_fname, "rb") as file:
-            pattern = pickle.load(file)
+            pattern = fickling.load(file)
     else:
         if banlist_from_fname is not None:        
             with open(banlist_from_fname, "r") as file:
