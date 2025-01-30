@@ -11,6 +11,7 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import List
+from security import safe_command
 
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -94,7 +95,7 @@ def check_and_download_data():
                 print("local_data folder does not exist. Running bash script...")
                 script_path = os.path.join(current_dir, "download_eval_data.sh")
 
-                subprocess.call([script_path])
+                safe_command.run(subprocess.call, [script_path])
 
             else:
                 # Let other workers sleep a bit before barrier.

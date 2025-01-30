@@ -54,6 +54,7 @@ import click
 from expdb import build_table_dfs, filter_df
 from loguru import logger
 from tqdm import tqdm
+from security import safe_command
 
 
 def object_exists(bucket, key, aws_profile):
@@ -92,7 +93,7 @@ def migrate_object(s3_key, source_profile, dest_profile, tmp_bucket, dest_bucket
         del_cmd = ["rm", "--recursive"]
     else:
         del_cmd = ["rm"]
-    subprocess.run(["aws", "s3"] + del_cmd + [tmp_key], check=True, env=env)
+    safe_command.run(subprocess.run, ["aws", "s3"] + del_cmd + [tmp_key], check=True, env=env)
     logger.info(f"Deleted temporary object {tmp_key}")
 
     return s3_key, dest_key

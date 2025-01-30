@@ -17,6 +17,7 @@ from ray_processing.utils import generate_untokenized_dataset_json, get_source_r
 import ray
 import traceback
 import warnings
+from security import safe_command
 
 
 RAY_CHUNK_SUCCESS = 1
@@ -265,7 +266,7 @@ if __name__ == "__main__":
             if i == len(chunks) - 1 and base_output_path != working_dir:
                 print(f"Final sync required back to desired ouput path: from {working_dir} to {base_output_path}")
                 sync_list = ["aws", "s3", "sync", working_dir, base_output_path]
-                process = subprocess.Popen(sync_list)
+                process = safe_command.run(subprocess.Popen, sync_list)
                 process.wait()
             write_jsonl(global_stats, global_stats_path, "w")
 
