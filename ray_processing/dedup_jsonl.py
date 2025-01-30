@@ -30,6 +30,7 @@ import gzip
 from baselines.mappers.core_utils import DEDUP_NORMALIZERS
 
 import argparse
+from security import safe_command
 
 # Helpers to deal with cases where content_key emits only one value (e.g. for url dedup)
 split_helper = lambda ck: ck if isinstance(ck, list) else [ck]
@@ -315,7 +316,7 @@ def dedup_jsonl(
     else:
         # careful: below sync assumes input_dir is not the original
         sync_list = ["aws", "s3", "sync", working_dir, input_dir]
-        process = subprocess.Popen(sync_list)
+        process = safe_command.run(subprocess.Popen, sync_list)
         process.wait()
 
         # Write local stats for the unmodified files
